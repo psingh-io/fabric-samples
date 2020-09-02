@@ -76,6 +76,9 @@ public final class AssetContract implements ContractInterface {
         // Optionally, set the endorsement policy of the assetId Key, such that any 1 Org (N) out of the specified Orgs can endorse future updates
         // setStateBasedEndorsementNOutOf(ctx, assetId, 1, new String[]{"Org1MSP", "Org2MSP"});
 
+        // Optionally, set the endorsement policy of the assetId Key, such that any 1(N) out of the Org's specified can endorse future updates
+        // setAssetStateBasedEndorsementWithNOutOfPolicy(ctx, assetId, 1, new String[]{"Org1MSP", "Org2MSP"});
+
         return asset;
     }
 

@@ -21,6 +21,8 @@ topic in the Fabric documentation.
 
 The implementation provided by State Based interface creates a policy which requires signatures from all the Org principals added, and hence is equivalent to an AND policy. For other advanced State Based policy implementations which are not supported by State Based interface directly like OR or NOutOf policies, please refer to method implementations setStateBasedEndorsementNOutOf(), which can be used as an alternative for setStateBasedEndorsement() inside asset-transfer-sbe smart contracts.
 
+The implementation provided by State Based interface creates a policy which requires signatures from all the Org principals added, and hence is equivalent to an AND policy. For other advanced State Based policy implementations which are not supported by State Based interface directly like OR or NOutOf policies, please refer to method implementations setAssetStateBasedEndorsementWithNOutOfPolicy(), which can be used as an alternative for setAssetStateBasedEndorsement() inside asset-transfer-sbe smart contracts.
+
 ## About the Sample
 
 The state-based endorsement (SBE) asset transfer sample demonstrates how to use
