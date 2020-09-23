@@ -117,18 +117,35 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         const listener = await network.addBlockListener(
-            async (err, blockNum, block) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                // Add the block to the processing map by block number
-                await ProcessingMap.set(block.header.number, block);
+            // async (err, blockNum, block) => {
+            //     if (err) {
+            //         console.error(err);
+            //         // console.error(err.blockData.data.toJSON());
+            //         return;
+            //     }
+            //     // // Add the block to the processing map by block number
+            //     await ProcessingMap.set(block.header.number, block);
 
-                console.log(`Added block ${blockNum} to ProcessingMap`)
+            //     console.log(`Added block ${blockNum} to ProcessingMap`)
+            // },
+            async (event) => {
+                // if (err) {
+                //     console.error(err);
+                //     return;
+                // }
+
+                let block = event.blockData;
+
+                //event.getTransactionEvents()["0"].privateData.ns_pvt_rwset["0"].collection_pvt_rwset["1"].rwset.writes["0"].value.toString()
+
+                // Add the block to the processing map by block number
+                // await ProcessingMap.set(block.header.number, block);
+
+                console.log(`Added block ${block.header.number} to ProcessingMap`)
             },
             // set the starting block for the listener
-            { filtered: false, startBlock: parseInt(nextBlock, 10) }
+            // { filtered: false, startBlock: parseInt(nextBlock, 10) }
+            { startBlock: parseInt(nextBlock, 10), type: 'private' }
         );
 
         console.log(`Listening for block events, nextblock: ${nextBlock}`);
@@ -145,7 +162,7 @@ async function main() {
 // listener function to check for blocks in the ProcessingMap
 async function processPendingBlocks(ProcessingMap) {
 
-    setTimeout(async () => {
+     setTimeout(async () => {
 
         // get the next block number from nextblock.txt
         let nextBlockNumber = fs.readFileSync(configPath, 'utf8');
@@ -156,8 +173,12 @@ async function processPendingBlocks(ProcessingMap) {
             // get the next block to process from the ProcessingMap
             processBlock = ProcessingMap.get(nextBlockNumber)
 
+            console.log('nextBlock', nextBlockNumber);
+            console.log('processBlock', processBlock);
+
             if (processBlock == undefined) {
-                break;
+                // break;
+                return;
             }
 
             try {
@@ -171,15 +192,16 @@ async function processPendingBlocks(ProcessingMap) {
 
             // increment the next block number to the next block
             fs.writeFileSync(configPath, parseInt(nextBlockNumber, 10) + 1)
+            console.log(`nextBlockNumber: ${nextBlockNumber}`)
 
             // retrive the next block number to process
             nextBlockNumber = fs.readFileSync(configPath, 'utf8');
 
         } while (true);
 
-        processPendingBlocks(ProcessingMap);
+    //     processPendingBlocks(ProcessingMap);
 
-    }, 250);
+     }, 100);
 
 }
 
